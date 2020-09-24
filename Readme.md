@@ -24,6 +24,7 @@
 
 ## Buck
 
+`schematic_initial` : Premier schéma pour identifier et calculer les composants critiques
 
 ---
 
