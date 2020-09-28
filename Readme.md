@@ -12,11 +12,14 @@
 > Xiaohu Zhang <br>
 
 
-### Drive
+#### Drive
 https://drive.google.com/drive/folders/1-SFvpA1gzc2IVzgCnODUU9VLPYTG9q0a?usp=sharing
 
-### Discord
+#### Discord
 https://discord.gg/qqvn4z
+
+#### Confluence
+https://espe.atlassian.net/wiki/spaces/PI/overview?homepageId=131077
 
 ### INSA Toulouse 5A 2020
 
