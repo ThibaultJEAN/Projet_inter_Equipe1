@@ -15,6 +15,9 @@
 ### Drive
 https://drive.google.com/drive/folders/1-SFvpA1gzc2IVzgCnODUU9VLPYTG9q0a?usp=sharing
 
+### Discord
+https://discord.gg/qqvn4z
+
 ### INSA Toulouse 5A 2020
 
 ---
