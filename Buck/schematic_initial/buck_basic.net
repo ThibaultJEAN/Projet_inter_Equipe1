@@ -5,7 +5,7 @@ Rch OUT 0 {Rch}
 S1 N001 IN N003 0 MYSW
 Cin IN 0 470µ
 V1 N003 0 PULSE(-1 1 0 1p 1p {alpha/Fs} {1/Fs})
-Vin IN 0 {Vin} Rser=50m
+Vin IN 0 {Vin} Rser=100m
 Cout N002 0 10µ Rser=1
 R1 IN Vin_mon 100k
 R2 Vin_mon 0 6.2k
@@ -17,7 +17,7 @@ R5 N002 N004 100
 R6 I_mon 0 5k
 .model D D
 .lib D:\Documents\LTspiceXVII\lib\cmp\standard.dio
-.param Fs=100k alpha=.64 Vin=.75*50 Rch=2.5
+.param Fs=100k alpha=.64 Vin=38 Rch=2.5
 .tran 0 30m 15m
 .model MYSW SW(Ron=100m Roff=1Meg Vt=.5 Vh=0.4)
 .meas Pin AVG -V(IN)*I(Vin)
