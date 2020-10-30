@@ -1,7 +1,8 @@
-Circuit: * D:\Documents\ecole\insa\5A\Projet\Projet_inter_Equipe1\Buck\schematic_initial\buck_basic.asc
+Circuit: * U:\Windows\Bureau\Projet_inter_Equipe1\Buck\schematic_initial\buck_basic.asc
 
 Direct Newton iteration for .op point succeeded.
 
+<<<<<<< HEAD
 pin: AVG(-v(in)*i(vin))=208.581 FROM 0 TO 0.015
 pout: AVG(v(out)*i(rch))=197.643 FROM 0 TO 0.015
 eff: pout/pin=0.947559
@@ -12,10 +13,22 @@ vout: AVG(v(out))=22.2283 FROM 0 TO 0.015
 
 Date: Tue Oct 27 21:40:14 2020
 Total elapsed time: 9.430 seconds.
+=======
+pin: AVG(-v(in)*i(vin))=215.132 FROM 0 TO 0.015
+pout: AVG(v(out)*i(rch))=203.852 FROM 0 TO 0.015
+eff: pout/pin=0.947567
+irms: RMS(i(l1))=9.03119 FROM 0 TO 0.015
+vout: AVG(v(out))=22.5749 FROM 0 TO 0.015
+
+
+Date: Wed Oct 28 16:06:19 2020
+Total elapsed time: 5.298 seconds.
+>>>>>>> a3d64e3b3121eacda1f812678f4eca6327c8dc07
 
 tnom = 27
 temp = 27
 method = modified trap
+<<<<<<< HEAD
 totiter = 626872
 traniter = 626865
 tranpoints = 250435
@@ -26,4 +39,16 @@ fillins = 5
 solver = Normal
 Matrix Compiler1: 1.34 KB object code size  0.9/0.6/[0.3]
 Matrix Compiler2: 1.54 KB object code size  0.4/0.7/[0.4]
+=======
+totiter = 696729
+traniter = 696717
+tranpoints = 265850
+accept = 238589
+rejected = 27261
+matrix size = 16
+fillins = 9
+solver = Normal
+Matrix Compiler1: 1.64 KB object code size  0.4/0.2/[0.1]
+Matrix Compiler2: 1.42 KB object code size  0.2/0.2/[0.1]
+>>>>>>> a3d64e3b3121eacda1f812678f4eca6327c8dc07
 
