@@ -1,0 +1,19 @@
+Rshunt = 5mOhms
+Imax = 10A
+Vsense = Rshunt*Imax = 5m*10A = 50mV
+Pshunt = Vsense*Imax = 50mV*10A = 500mW
+Note : Attention au layout du PCB sur le shunt : Kelvin connections indispensable
+
+choix LTC6101 :
+
+High side : mesurer 50mV superposés à 24V : mode commun de ~54dB
+- CMRR de 115dB min, 140dB typ. :
+	ENOB en sortie : (115-54)/6.02=10.2 bits min, 14bits typ.
+	ADC µC : 12bits. Résolution en courant pour 10bits : 10A/2^10=9.76mA, pour 12bits : 2.4mA OK même pour 10 bits effectifs
+- Bande passante de 200kHz >> F acqusition µC : OK
+- Offset en entrée de 150µV max, soit 150µV/50mV*10A=30mA ramenés à la mesure : OK (offset typ. 85µV soit 17mA equ.)
+- Gain réglable avec 2 résistances.
+- Vin max > Tension max du PV : pas cramable même en cas de grosse cata.
+- Consommation : <1mA
+- 2$ en qté unitaire
+- Avantage mesure en high side : une seule et unique masse sur tout le système Buck+BMS
