@@ -140,7 +140,7 @@ GenerateClassCluster=0
 DocumentUniqueId=HUUKNJJX
 
 [Document7]
-DocumentPath=Nucleo_shield.SchDoc
+DocumentPath=Connectors.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
