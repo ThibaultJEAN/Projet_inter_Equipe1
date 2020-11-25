@@ -38,23 +38,6 @@ PrefsVaultGUID=
 PrefsRevisionGUID=
 
 [Document1]
-DocumentPath=PCB1.PcbDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=HVTBETDI
-
-[Document2]
 DocumentPath=Main.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -71,7 +54,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GPBXJVDO
 
-[Document3]
+[Document2]
 DocumentPath=Buck.SCHLIB
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -88,7 +71,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=EEHZXCCB
 
-[Document4]
+[Document3]
 DocumentPath=Buck.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -104,6 +87,23 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BQCMJDTM
+
+[Document4]
+DocumentPath=main.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=ASGFCEXU
 
 [Configuration1]
 Name=Sources
