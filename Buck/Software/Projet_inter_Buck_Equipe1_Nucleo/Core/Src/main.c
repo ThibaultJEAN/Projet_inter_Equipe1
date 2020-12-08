@@ -32,8 +32,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define F_PWM    150000UL
-#define F_ACQ    10000UL
+#define F_PWM    75000UL // min : 1220 Hz max: 80 MHz
+#define F_ACQ    2000UL // min : 0.018 Hz max: 80 MHz
 #define KVOUTMON (6.2/(110.0+6.2))
 #define KVINMON  (6.8/(100.0+6.8))
 #define KIMON    (0.005*50.0)
@@ -45,6 +45,15 @@
 #define REG_MODE_OL   3
 
 #define F_TIM1 80000000UL/F_PWM
+
+/* Bloc Define Regulation  */
+
+#define KP_CC 1 // Valeur du coefficient proportionnel régulation CC
+#define KI_CC 1 // Valeur du coefficient intégral régulation CC
+#define KP_CV 1 // Valeur du coefficient proportionnel régulation CV
+#define KI_CV 1 // Valeur du coefficient intégral régulation CV
+
+#define SAT_ERR_TOT 100 // Valeur pour la saturation de l'erreur totale
 
 /* USER CODE END PD */
 
@@ -69,12 +78,22 @@ int Value = 0;
 int Vout_mon = 0;
 int Vin_mon = 0;
 int I_mon = 0;
-int P_mon = 0;
+int Pin = 0;  //Regulation MPPT Puissance calculée en entrée
+int Pin_pre = 0; // Régulation MPPT Ancienne Puissance d'entrée
 int Reg_Mode = 0;
 int Vout_Ordered = 0;
 int I_Ordered = 0;
+int I_inc = 0;
 
 uint32_t ADC_buffer[3] = {0};
+
+/* Bloc Variables Regulation  */
+
+int Delta_Err = 0;  //Valeur de l'erreur entre la tension/courant souhaitée et la valeur lue
+int Err_Tot = 0;  //Pour la partie intégrale de la régulation
+int Delta_Duty = 0; //Variation du duty après la correction proportionnelle, intégrale
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,7 +106,7 @@ static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
-void Set_Duty_Cycle(int Duty_Cycle);
+void Set_Duty_Cycle();
 void SetVout(float target);
 void SetI(float target);
 void Set_Duty(float target);
@@ -139,14 +158,20 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  /* Bloc Initialisation ADC */
   HAL_ADC_Start_DMA(&hadc1,(uint32_t *)&ADC_buffer, 3);
   HAL_TIM_Base_Start_IT(&htim2);
   HAL_ADC_Start_IT(&hadc1);
 
-
+  /* Bloc Initialisation PWM */
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  RegulateCV();
+  Reg_Mode = REG_MODE_CV;
+
+  /* Initialiser une valeur */
+  SetVout(11.0);
+  //SetI(5.0);
   //Set_Duty_Cycle(0.25*htim1.Init.Period);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -243,13 +268,13 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV8;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.NbrOfConversion = 3;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T2_TRGO;
@@ -326,7 +351,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 0;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  //htim1.Init.Period = 65535;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -351,7 +376,7 @@ static void MX_TIM1_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 32000;
+  sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
@@ -399,14 +424,14 @@ static void MX_TIM2_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig = {0};
 
   /* USER CODE BEGIN TIM2_Init 1 */
-  htim2.Init.Period = 80000000UL/(F_ACQ*65536);
+  htim2.Init.Period = 80000000UL/(F_ACQ);
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 15999;
+  htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 999;
+  //htim2.Init.Period = 999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
   {
     Error_Handler();
@@ -417,7 +442,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_ENABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
@@ -447,7 +472,7 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Parity = UART_PARITY_EVEN;
   huart2.Init.Mode = UART_MODE_TX_RX;
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
@@ -513,10 +538,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void Set_Duty_Cycle(int Duty_Cycle)
+
+void Set_Duty_Cycle()
 {
-	//&htim1.Init.Period
-	__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Duty_Cycle);
+
 	if (Duty_Cycle>F_TIM1-1)
 	{
 		Duty_Cycle= F_TIM1 -1;
@@ -524,34 +549,46 @@ void Set_Duty_Cycle(int Duty_Cycle)
 	{
 		Duty_Cycle=1;
 	}
+	__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Duty_Cycle);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 
-	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+
 	//HAL_ADC_ConfigChannel(&hadc1, );
 	//HAL_ADC_Start(&hadc1);
 	//HAL_ADC_PollForConversion(&hadc1, 1000);
 	/*if (htim == &htim2)
 	{
+		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	//Vout_mon = HAL_ADC_GetValue(&hadc1);
-	Vout_mon = ADC_buffer[0];
-	Vin_mon = ADC_buffer[1];
-	I_mon = ADC_buffer[2];
+	//Vout_mon = ADC_buffer[0];
+	//Vin_mon = ADC_buffer[1];
+	//I_mon = ADC_buffer[2];
 	}*/
-
-
-
 
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
+	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	Vout_mon = ADC_buffer[0];
 	Vin_mon = ADC_buffer[1];
 	I_mon = ADC_buffer[2];
+	if(Reg_Mode == REG_MODE_CV)
+	{
+		RegulateCV();
+	}
 
+	/*if(Reg_Mode == REG_MODE_CC)
+	{
+		RegulateCC();
+	}
+	if(Reg_Mode == REG_MODE_MPPT)
+	{
+		RegulateMPPT();
+	}*/
 
 }
 
@@ -572,31 +609,75 @@ void Set_Duty(float target)
 
 void RegulateCV(void)
 {
-	if (Vout_mon<Vout_Ordered)
+	Delta_Err = Vout_Ordered - Vout_mon;
+	Err_Tot += Delta_Err;
+
+	if (Err_Tot > SAT_ERR_TOT)
+	{
+		Err_Tot = SAT_ERR_TOT;
+	}
+	if (Err_Tot < -(SAT_ERR_TOT))
+	{
+		Err_Tot = -SAT_ERR_TOT;
+	}
+
+	Delta_Duty = (Delta_Err *KP_CV) + (Err_Tot * KI_CV);
+	Duty_Cycle += Delta_Duty;
+
+	Set_Duty_Cycle();
+
+	/*if (Vout_mon<Vout_Ordered)
 	{
 		Duty_Cycle++;
 	} else if(Vout_mon>Vout_Ordered)
 	{
 		Duty_Cycle--;
 	}
-	Set_Duty_Cycle(Duty_Cycle);
+	Set_Duty_Cycle();*/
 }
 
 void RegulateCC(void)
 {
-	if (I_mon<I_Ordered)
+	Delta_Err = I_Ordered - I_mon;
+	Err_Tot += Delta_Err;
+
+	if (Err_Tot > SAT_ERR_TOT)
+	{
+		Err_Tot = SAT_ERR_TOT;
+	}
+	if (Err_Tot < -(SAT_ERR_TOT))
+	{
+		Err_Tot = -SAT_ERR_TOT;
+	}
+
+	Delta_Duty = (Delta_Err *KP_CC) + (Err_Tot * KI_CC);
+	Duty_Cycle += Delta_Duty;
+
+	Set_Duty_Cycle();
+
+	/*if (I_mon<I_Ordered)
 	{
 		Duty_Cycle++;
 	} else if (I_mon>I_Ordered)
 	{
 		Duty_Cycle--;
 	}
-	Set_Duty_Cycle(Duty_Cycle);
+	Set_Duty_Cycle();*/
 }
 
 /*void RegulateMPPT(void)
 {
-	if ()
+	Pin = I_mon*Vin_mon;
+	if (Pin < Pin_pre)
+	{
+		I_inc = -1;
+	}
+	else
+	{
+		I_inc = 1;
+	}
+	Pin_pre = Pin;
+	I_Ordered = I_Ordered + I_inc;
 }*/
 
 
