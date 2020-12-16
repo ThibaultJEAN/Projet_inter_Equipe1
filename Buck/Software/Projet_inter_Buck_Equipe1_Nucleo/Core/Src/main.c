@@ -33,7 +33,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define F_PWM    75000UL // min : 1220 Hz max: 80 MHz
-#define F_ACQ    2000UL // min : 0.018 Hz max: 80 MHz
+#define F_ACQ    7500UL // min : 0.018 Hz max: 80 MHz
 #define KVOUTMON (6.2/(110.0+6.2))
 #define KVINMON  (6.8/(100.0+6.8))
 #define KIMON    (0.005*50.0)
@@ -50,10 +50,10 @@
 
 #define KP_CC 1 // Valeur du coefficient proportionnel régulation CC
 #define KI_CC 1 // Valeur du coefficient intégral régulation CC
-#define KP_CV 1 // Valeur du coefficient proportionnel régulation CV
+#define KP_CV 250/2370 // Valeur du coefficient proportionnel régulation CV
 #define KI_CV 1 // Valeur du coefficient intégral régulation CV
 
-#define SAT_ERR_TOT 100 // Valeur pour la saturation de l'erreur totale
+#define SAT_ERR_TOT 400 // Valeur pour la saturation de l'erreur totale
 
 /* USER CODE END PD */
 
@@ -168,7 +168,7 @@ int main(void)
   Reg_Mode = REG_MODE_CV;
 
   /* Initialiser une valeur */
-  SetVout(11.0);
+  SetVout(24.0);
   //SetI(5.0);
   //Set_Duty_Cycle(0.25*htim1.Init.Period);
 
@@ -621,7 +621,7 @@ void RegulateCV(void)
 		Err_Tot = -SAT_ERR_TOT;
 	}
 
-	Delta_Duty = (Delta_Err *KP_CV) + (Err_Tot * KI_CV);
+	Delta_Duty = (Delta_Err *KP_CV) + (Err_Tot *KP_CV/10 );
 	Duty_Cycle += Delta_Duty;
 
 	Set_Duty_Cycle();

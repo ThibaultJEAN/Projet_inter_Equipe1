@@ -1,10 +1,10 @@
-14:36:53 **** Incremental Build of configuration Debug for project Projet_inter_Buck_Equipe1_Nucleo ****
+17:02:21 **** Incremental Build of configuration Debug for project Projet_inter_Buck_Equipe1_Nucleo ****
 make -j8 all 
 arm-none-eabi-size   Projet_inter_Buck_Equipe1_Nucleo.elf 
    text	   data	    bss	    dec	    hex	filename
-  27832	     20	   2060	  29912	   74d8	Projet_inter_Buck_Equipe1_Nucleo.elf
+  27936	     20	   2068	  30024	   7548	Projet_inter_Buck_Equipe1_Nucleo.elf
 Finished building: default.size.stdout
  
 
-14:36:53 Build Finished. 0 errors, 0 warnings. (took 427ms)
+17:02:21 Build Finished. 0 errors, 0 warnings. (took 406ms)
 
