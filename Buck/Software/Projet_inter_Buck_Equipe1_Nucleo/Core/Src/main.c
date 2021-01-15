@@ -600,9 +600,8 @@ void Set_Duty_OL(float target){
 	Duty_Cycle=(target)*F_TIM1;
 }
 
-void RegulateCV(void)
-{
-	Delta_Err = Vout_Ordered - Vout_mon;
+void RegulateCV(void){
+	Delta_Err = Vout_set - Vout_mon;
 	Err_Tot += Delta_Err;
 
 	if (Err_Tot > SAT_ERR_TOT)
@@ -629,9 +628,8 @@ void RegulateCV(void)
 	Set_Duty_Cycle();*/
 }
 
-void RegulateCC(void)
-{
-	Delta_Err = I_Ordered - I_mon;
+void RegulateCC(void){
+	Delta_Err = Iout_set - I_mon;
 	Err_Tot += Delta_Err;
 
 	if (Err_Tot > SAT_ERR_TOT)
