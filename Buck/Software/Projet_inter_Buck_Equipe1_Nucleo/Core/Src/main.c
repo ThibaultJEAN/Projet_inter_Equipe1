@@ -56,10 +56,10 @@
 
 /* Bloc Define Regulation  */
 
-#define KP_CC 1 // Valeur du coefficient proportionnel régulation CC
-#define KI_CC 1 // Valeur du coefficient intégral régulation CC
-#define KP_CV 250/2370 // Valeur du coefficient proportionnel régulation CV
-#define KI_CV 1 // Valeur du coefficient intégral régulation CV
+#define KP_CC 1 			// Valeur du coefficient proportionnel régulation CC
+#define KI_CC 1 			// Valeur du coefficient intégral régulation CC
+#define KP_CV 250/2370 		// Valeur du coefficient proportionnel régulation CV
+#define KI_CV 1 			// Valeur du coefficient intégral régulation CV
 
 #define SAT_ERR_TOT 400 // Valeur pour la saturation de l'erreur totale
 
@@ -602,18 +602,15 @@ void Set_Duty_OL(float target){
 
 void RegulateCV(void){
 	Delta_Err = Vout_set - Vout_mon;
-	Err_Tot += Delta_Err;
+	/*Err_Tot += Delta_Err;
 
-	if (Err_Tot > SAT_ERR_TOT)
-	{
+	if (Err_Tot > SAT_ERR_TOT){
 		Err_Tot = SAT_ERR_TOT;
-	}
-	if (Err_Tot < -(SAT_ERR_TOT))
-	{
+	}else if (Err_Tot < -(SAT_ERR_TOT)){
 		Err_Tot = -SAT_ERR_TOT;
-	}
+	}*/
 
-	Delta_Duty = (Delta_Err *KP_CV) + (Err_Tot *KP_CV/10 );
+	Delta_Duty = (Delta_Err *KP_CV) ;//+ (Err_Tot *KP_CV/10 );
 	Duty_Cycle += Delta_Duty;
 
 	Set_Duty_Cycle();
