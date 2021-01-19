@@ -8,4 +8,4 @@ Buck.c:69:6:RegulateMPPT	0	static
 Buck.c:82:7:getVout	8	static
 Buck.c:85:7:getIout	8	static
 Buck.c:88:7:getVin	8	static
-Buck.c:92:6:printBuckStatus	48	static
+Buck.c:92:6:printBuckStatus	64	static

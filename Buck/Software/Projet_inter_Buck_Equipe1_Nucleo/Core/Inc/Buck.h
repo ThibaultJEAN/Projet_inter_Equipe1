@@ -7,7 +7,7 @@
 #define F_PWM    150000UL // min : 1220 Hz max: 80 MHz
 #define F_ACQ    5000UL // min : 0.018 Hz max: 80 MHz
 #define KVOUTMON (6.2/(110.0+6.2))
-#define KVINMON  (0.9375*0.05838)//(6.2/(100.0+6.2))
+#define KVINMON  (0.942*0.05838)//(6.2/(100.0+6.2))
 #define KIMON    (0.006*51.0)
 #define VCC      (3.3)
 
@@ -27,12 +27,12 @@
 
 #define KP_CC 0.1 			// Valeur du coefficient proportionnel régulation CC
 #define KI_CC .001 			// Valeur du coefficient intégral régulation CC
-#define KP_CV 0.01//(250.0/2370.0) 		// Valeur du coefficient proportionnel régulation CV
+#define KP_CV 0.05//(250.0/2370.0) 		// Valeur du coefficient proportionnel régulation CV
 #define KI_CV 1 			// Valeur du coefficient intégral régulation CV
 
 #define SAT_ERR_TOT 400 // Valeur pour la saturation de l'erreur totale
 
-int Duty_Cycle;	//Timer duty value, from 0 to F_TIM1
+float Duty_Cycle;	//Timer duty value, from 0 to F_TIM1
 int Vout_mon;		//Measured output voltage, from 0 to 4095, PC0
 int Vin_mon;		//Measured input  voltage, from 0 to 4095, PC1
 int I_mon;			//Measured output current, from 0 to 4095, PC2
@@ -41,8 +41,8 @@ int I_mon;			//Measured output current, from 0 to 4095, PC2
 //Onboard LED LD2 : PA5
 //PWM Output : PA8
 
-int Pin;   //Measured input power for MPPT regulation
-int Pin_p; //Previously measured input power for MPPT regulation
+float Pin;   //Measured input power for MPPT regulation
+float Pin_p; //Previously measured input power for MPPT regulation
 int I_inc;	//
 
 int Reg_Mode;
@@ -51,9 +51,9 @@ int Iout_set;
 
 uint32_t ADC_buffer[3];
 
-int Delta_Err;  	//Valeur de l'erreur entre la tension/courant souhaitée et la valeur lue
-int Err_Tot; 		//Pour la partie intégrale de la régulation
-int Delta_Duty; 	//Variation du duty après la correction proportionnelle, intégrale
+float Delta_Err;  	//Valeur de l'erreur entre la tension/courant souhaitée et la valeur lue
+float Err_Tot; 		//Pour la partie intégrale de la régulation
+float Delta_Duty; 	//Variation du duty après la correction proportionnelle, intégrale
 
 void Set_Duty_Cycle();
 void SetVout(float target);

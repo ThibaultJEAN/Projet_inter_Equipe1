@@ -90,7 +90,7 @@ float getVin(void){
 }
 
 void printBuckStatus(void){
-	printf("Vin %.1fV, Vout %.1fV, Iout %.2fA, Duty : %d%%, Regmode ",getVin(), getVout(), getIout(), Duty_Cycle*100/533);
+	printf("Vin %.1fV, Vout %.1fV, Iout %.2fA, Duty : %.1f%%, Pout %.1fWRegmode ",getVin(), getVout(), getIout(), Duty_Cycle*100/533,getIout()*getVout());
 	switch(Reg_Mode){
 	case REG_MODE_CV :
 		printf("CV");
