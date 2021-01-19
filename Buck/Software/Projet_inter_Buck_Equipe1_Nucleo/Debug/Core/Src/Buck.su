@@ -4,8 +4,8 @@ Buck.c:21:6:SetI	8	static
 Buck.c:27:6:Set_Duty_OL	16	static
 Buck.c:34:6:RegulateCV	8	static
 Buck.c:50:6:RegulateCC	8	static
-Buck.c:69:6:RegulateMPPT	0	static
-Buck.c:82:7:getVout	8	static
-Buck.c:85:7:getIout	8	static
-Buck.c:88:7:getVin	8	static
-Buck.c:92:6:printBuckStatus	64	static
+Buck.c:69:6:RegulateMPPT	4	static
+Buck.c:85:7:getVout	8	static
+Buck.c:88:7:getIout	8	static
+Buck.c:91:7:getVin	8	static
+Buck.c:95:6:printBuckStatus	64	static

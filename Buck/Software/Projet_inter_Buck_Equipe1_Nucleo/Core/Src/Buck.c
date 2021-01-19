@@ -67,15 +67,18 @@ void RegulateCC(void){
 }
 
 void RegulateMPPT(void){
-	/*//Iin=Iout*Vout/Vin
-	Pin = I_mon*Vout_mon;
-	if (Pin < Pin_p){
-		I_inc = -1;
-	}else{
-		I_inc = 1;
+	if(cnt++>25){
+		Pin = I_mon*Vin_mon;
+		if (Pin < (Pin_p - 551)){
+			I_inc=-1;
+		}else if(Pin > (Pin_p + 551)){
+			I_inc=1;
+		}
+		Pin_p = Pin;
+		Iout_set+=I_inc;
+		cnt=0;
 	}
-	Pin_p = Pin;
-	Iout_set = Iout_set + I_inc;*/
+	RegulateCC();
 }
 
 
@@ -90,7 +93,7 @@ float getVin(void){
 }
 
 void printBuckStatus(void){
-	printf("Vin %.1fV, Vout %.1fV, Iout %.2fA, Duty : %.1f%%, Pout %.1fWRegmode ",getVin(), getVout(), getIout(), Duty_Cycle*100/533,getIout()*getVout());
+	printf("Vin %.1fV, Vout %.1fV, Iout %.2fA, Duty : %.1f%%, Pout %.1fW Regmode ",getVin(), getVout(), getIout(), Duty_Cycle*100/533,getIout()*getVout());
 	switch(Reg_Mode){
 	case REG_MODE_CV :
 		printf("CV");
@@ -107,6 +110,6 @@ void printBuckStatus(void){
 	default :
 		break;
 	}
-	printf("\r\n");
+	printf("I_inc %d, Iset %d\r\n",I_inc,Iout_set);
 //	printf("\tI_mon : %d\t Vin_mon : %d Err : %d\r\n",I_mon,Vin_mon,Delta_Err);
 }

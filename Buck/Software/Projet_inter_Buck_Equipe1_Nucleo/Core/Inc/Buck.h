@@ -41,10 +41,10 @@ int I_mon;			//Measured output current, from 0 to 4095, PC2
 //Onboard LED LD2 : PA5
 //PWM Output : PA8
 
-float Pin;   //Measured input power for MPPT regulation
-float Pin_p; //Previously measured input power for MPPT regulation
+uint32_t Pin;   //Measured input power for MPPT regulation
+uint32_t Pin_p; //Previously measured input power for MPPT regulation
 int I_inc;	//
-
+uint8_t cnt;
 int Reg_Mode;
 int Vout_set;
 int Iout_set;

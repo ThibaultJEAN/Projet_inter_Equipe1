@@ -160,6 +160,9 @@ int main(void)
 	  case 'm':
 		  printf("Switched to MPPT mode\r\n");
 		  Reg_Mode=REG_MODE_MPPT;
+		  Iout_set=400;
+		  I_inc=1;
+		  cnt=0;
 		  break;
 	  case '+':
 		  v+=2*increment;
@@ -600,8 +603,8 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
 		RegulateCC();
 		break;
 	case REG_MODE_MPPT:
-		//RegulateMPPT();
-		Set_Duty_OL(0.1);
+		RegulateMPPT();
+		//Set_Duty_OL(0.1);
 		break;
 	default :
 		break;
