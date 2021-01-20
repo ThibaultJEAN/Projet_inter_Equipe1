@@ -1,0 +1,3 @@
+BMS_Management.c:11:6:BMSManagement_setModeBatt	4	static
+BMS_Management.c:16:5:BMSManagement_getLastStatus	16	static
+BMS_Management.c:24:7:BMSManagement_getInfo	24	static

@@ -1,0 +1,3 @@
+ModeBatt.c:5:5:ModeBatt_setMode	24	static
+ModeBatt.c:43:5:ModeBatt_resetMode	16	static
+ModeBatt.c:57:5:ModeBatt_checkModeBattery	8	static
