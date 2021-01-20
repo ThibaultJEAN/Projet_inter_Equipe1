@@ -19,7 +19,7 @@
  * @retval: None
  *
  * */
-void BMSManagement_setModeBatt(void);
+void BMSManagement_setModeBatt(t_mode mode);
 
 
 /*
