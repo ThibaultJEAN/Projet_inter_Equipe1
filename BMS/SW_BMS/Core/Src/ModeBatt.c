@@ -10,30 +10,30 @@ int ModeBatt_setMode(t_mode mode)
 	switch (mode){ //switch mode
 
 	case MODE_PARALLELE:
-		HAL_GPIO_WrtitePin(GPIO_MODE0,PIN_MODE0,0);
-		HAL_GPIO_WrtitePin(GPIO_MODE1,PIN_MODE1,0);
+		HAL_GPIO_WritePin(GPIO_MODE0,PIN_MODE0,0);
+		HAL_GPIO_WritePin(GPIO_MODE1,PIN_MODE1,0);
 		break;
 
 	case MODE_SERIE:
-		HAL_GPIO_WrtitePin(GPIO_MODE0,PIN_MODE0,1);
-		HAL_GPIO_WrtitePin(GPIO_MODE1,PIN_MODE1,1);
+		HAL_GPIO_WritePin(GPIO_MODE0,PIN_MODE0,1);
+		HAL_GPIO_WritePin(GPIO_MODE1,PIN_MODE1,1);
 		break;
 
 	case MODE_BATT1:
-		HAL_GPIO_WrtitePin(GPIO_MODE0,PIN_MODE0,0);
-		HAL_GPIO_WrtitePin(GPIO_MODE1,PIN_MODE1,1);
+		HAL_GPIO_WritePin(GPIO_MODE0,PIN_MODE0,0);
+		HAL_GPIO_WritePin(GPIO_MODE1,PIN_MODE1,1);
 		break;
 
 	case MODE_BATT2:
-		HAL_GPIO_WrtitePin(GPIO_MODE0,PIN_MODE0,1);
-		HAL_GPIO_WrtitePin(GPIO_MODE1,PIN_MODE1,0);
+		HAL_GPIO_WritePin(GPIO_MODE0,PIN_MODE0,1);
+		HAL_GPIO_WritePin(GPIO_MODE1,PIN_MODE1,0);
 		break;
 
 	}
-	HAL_GPIO_WrtitePin(GPIO_LOAD,PIN_LOAD,1); //LOAD pin triggers CPLD
+	HAL_GPIO_WritePin(GPIO_LOAD,PIN_LOAD,1); //LOAD pin triggers CPLD
 	ret_val= ModeBatt_checkModeBattery();
 
-	HAL_GPIO_WrtitePin(GPIO_LOAD,PIN_LOAD,0);
+	HAL_GPIO_WritePin(GPIO_LOAD,PIN_LOAD,0);
 	return ret_val;
 
 

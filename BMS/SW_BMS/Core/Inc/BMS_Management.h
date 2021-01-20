@@ -2,7 +2,7 @@
  * BMS_Management.h
  *
  *  Created on: 27 Nov 2020
- *      Author: jerem
+ *      Author: jeremy aubert for GEI Corp
  */
 
 #ifndef SRC_BMS_MANAGEMENT_H_

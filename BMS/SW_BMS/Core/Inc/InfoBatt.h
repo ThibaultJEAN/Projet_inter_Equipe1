@@ -2,9 +2,9 @@
  * InfoBatt.h
  *
  *  Created on: 27 Nov 2020
- *      Author: jerem
+ *      Author: jeremy aubert for GEI Corp
  */
-#include "BMS_Management.h" //a retirer si c'est l'inverse
+#include "BMS_Management.h"
 #include "i2c.h"
 #ifndef SRC_INFOBATT_H_
 #define SRC_INFOBATT_H_

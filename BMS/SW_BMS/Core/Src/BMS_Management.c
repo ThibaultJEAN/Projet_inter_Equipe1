@@ -8,33 +8,34 @@
 #include "BMS_Management.h"
 
 
-void BMSManagement_setModeBatt(void)
+void BMSManagement_setModeBatt(t_mode mode)
 {
-	//Do your thing mate.
+	ModeBatt_setMode(mode);
 }
 
-int BMSManagement_getLastStatus(void) //Comment on va faire ???
+int BMSManagement_getLastStatus(void)
 {
-	int val=2;
+	int val=0;
 	float cmp;
-	//vérifier l'état des switchs
+
+	val=ModeBatt_checkModeBattery();
 
 	cmp=BMSManagement_getInfo('S',BATTERY1);
-	if (cmp>17.001) //define val1 (50% de la batterie), val2 (98% de la batterie)
+	if (cmp>17.001) 							//17.001 Ah - valeur maximale de charge dans la batterie (/17Ah)
 		val=1;
-	else if (cmp<10.0)
-		val=0;
+	else if (cmp<10.0)							//10.0 Ah - valeur minimale de charge dans la batterie (/17Ah)
+		val=1;
 
 	cmp=BMSManagement_getInfo('S',BATTERY2);
 	if (cmp>17.001)
 		val=1;
 	else if (cmp<10.0)
-		val=0;
+		val=1;
 	return val;
 }
 
 
-float BMSManagement_getInfo(char info, I2C_HandleTypeDef nb_batt) //done
+float BMSManagement_getInfo(char info, I2C_HandleTypeDef nb_batt)
 {
 	float val;
 	switch (info)
@@ -53,7 +54,7 @@ float BMSManagement_getInfo(char info, I2C_HandleTypeDef nb_batt) //done
 }
 
 
-void BMSManagement_Init(void)
+void BMSManagement_Init(void) 						//Error management to add!
 {
 	HAL_StatusTypeDef ret;
 	while (HAL_I2C_IsDeviceReady(&BATTERY1,GAUGE_ADDR,1,100)!=HAL_OK)
