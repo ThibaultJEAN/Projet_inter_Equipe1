@@ -36,7 +36,7 @@
 #define F_ACQ    7500UL // min : 0.018 Hz max: 80 MHz
 #define KVOUTMON (6.2/(110.0+6.2))
 #define KVINMON  (6.8/(100.0+6.8))
-#define KIMON    (0.005*50.0)
+#define KIMON    (0.006*50.0)
 #define VCC      (3.3)
 
 #define REG_MODE_CV   0
@@ -48,10 +48,12 @@
 
 /* Bloc Define Regulation  */
 
+#define T_ACQ 1/7500 // Temps d'acquisition
+
 #define KP_CC 1 // Valeur du coefficient proportionnel régulation CC
 #define KI_CC 1 // Valeur du coefficient intégral régulation CC
-#define KP_CV 250/2370 // Valeur du coefficient proportionnel régulation CV
-#define KI_CV 1 // Valeur du coefficient intégral régulation CV
+#define KP_CV 250/2370 // Valeur du coefficient proportionnel régulation CV Valeur Matlab : 32,78
+#define KI_CV 1 // Valeur du coefficient intégral régulation CV Valeur Matlab : 98,44
 
 #define SAT_ERR_TOT 400 // Valeur pour la saturation de l'erreur totale
 
@@ -78,20 +80,21 @@ int Value = 0;
 int Vout_mon = 0;
 int Vin_mon = 0;
 int I_mon = 0;
-int Pin = 0;  //Regulation MPPT Puissance calculée en entrée
-int Pin_pre = 0; // Régulation MPPT Ancienne Puissance d'entrée
+int32_t Pin = 0;  //Regulation MPPT Puissance calculée en entrée
+int32_t Pin_pre = 0; // Régulation MPPT Ancienne Puissance d'entrée
+int32_t MPPT_Hystérésis = 0; //Pour la régulation MPPT
+int MPPT_incrément = 0;
 int Reg_Mode = 0;
 int Vout_Ordered = 0;
 int I_Ordered = 0;
-int I_inc = 0;
 
 uint32_t ADC_buffer[3] = {0};
 
 /* Bloc Variables Regulation  */
 
 int Delta_Err = 0;  //Valeur de l'erreur entre la tension/courant souhaitée et la valeur lue
-int Err_Tot = 0;  //Pour la partie intégrale de la régulation
-int Delta_Duty = 0; //Variation du duty après la correction proportionnelle, intégrale
+int Err_Pre = 0;  //Valeur de l'erreur précédente
+int Duty_Pre = 0; //Valeur de duty cycle précédente
 
 
 /* USER CODE END PV */
@@ -542,12 +545,12 @@ static void MX_GPIO_Init(void)
 void Set_Duty_Cycle()
 {
 
-	if (Duty_Cycle>F_TIM1-1)
+	if (Duty_Cycle>((F_TIM1-1)*0.9))
 	{
-		Duty_Cycle= F_TIM1 -1;
-	} else if (Duty_Cycle<1)
+		Duty_Cycle= (F_TIM1 -1)*0.9;
+	} else if (Duty_Cycle<(F_TIM1*0.1))
 	{
-		Duty_Cycle=1;
+		Duty_Cycle=0.1*F_TIM1;
 	}
 	__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Duty_Cycle);
 }
@@ -609,7 +612,16 @@ void Set_Duty(float target)
 
 void RegulateCV(void)
 {
+
 	Delta_Err = Vout_Ordered - Vout_mon;
+
+	Duty_Cycle = Duty_Pre + KP_CV * Delta_Err - KP_CV * Err_Pre + KI_CV * T_ACQ * Err_Pre;
+
+
+	Set_Duty_Cycle();
+	Duty_Pre = Duty_Cycle;
+	Err_pre = Delta_Err;
+	/*Delta_Err = Vout_Ordered - Vout_mon;
 	Err_Tot += Delta_Err;
 
 	if (Err_Tot > SAT_ERR_TOT)
@@ -624,7 +636,7 @@ void RegulateCV(void)
 	Delta_Duty = (Delta_Err *KP_CV) + (Err_Tot *KP_CV/10 );
 	Duty_Cycle += Delta_Duty;
 
-	Set_Duty_Cycle();
+	Set_Duty_Cycle();*/
 
 	/*if (Vout_mon<Vout_Ordered)
 	{
@@ -665,10 +677,12 @@ void RegulateCC(void)
 	Set_Duty_Cycle();*/
 }
 
-/*void RegulateMPPT(void)
+void RegulateMPPT(void)
 {
+
 	Pin = I_mon*Vin_mon;
-	if (Pin < Pin_pre)
+	MPPT_Hystérésis = 55100;
+	if (Pin < Pin_pre-MPPT_Hystérésis)
 	{
 		I_inc = -1;
 	}
@@ -677,8 +691,9 @@ void RegulateCC(void)
 		I_inc = 1;
 	}
 	Pin_pre = Pin;
-	I_Ordered = I_Ordered + I_inc;
-}*/
+	I_Ordered = I_Ordered + 0.25*I_inc;
+	SetI(I_Ordered);
+}
 
 
 /* USER CODE END 4 */

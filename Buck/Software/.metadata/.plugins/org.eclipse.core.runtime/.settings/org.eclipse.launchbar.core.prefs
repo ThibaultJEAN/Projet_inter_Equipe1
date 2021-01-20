@@ -1,7 +1,9 @@
 LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
 LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
 LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
-configDescList=org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Projet_inter_Buck_Equipe1_Nucleo Debug
+configDescList=org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Programmation_faible_energie_RTC Debug,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Projet_inter_Buck_Equipe1_Nucleo Debug
 eclipse.preferences.version=1
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Programmation_faible_energie_RTC\ Debug/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Programmation_faible_energie_RTC\ Debug/activeLaunchTarget=null\:---
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Projet_inter_Buck_Equipe1_Nucleo\ Debug/activeLaunchMode=run
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Projet_inter_Buck_Equipe1_Nucleo\ Debug/activeLaunchTarget=null\:---
