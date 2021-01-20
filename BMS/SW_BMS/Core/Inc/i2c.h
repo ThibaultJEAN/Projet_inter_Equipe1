@@ -34,16 +34,24 @@ extern I2C_HandleTypeDef hi2c1;
 extern I2C_HandleTypeDef hi2c2;
 
 /* USER CODE BEGIN Private defines */
+static const uint8_t GAUGE_ADDR=0x64<<1;
+static const uint8_t CTRL_REG=0x01; //register B
+static const uint8_t AUTO_MODE=0xE8; //data + prescaler à 1024
+static const uint8_t SHUTDOWN=0xE9; //shutdown au registre B sans écraser
+static const uint8_t VOLT_REG=0x08;
+static const uint8_t AMP_REG=0x0E;
+static const uint8_t COUL_REG=0x02;
 
+I2C_HandleTypeDef BATTERY1;
+I2C_HandleTypeDef BATTERY2;
 /* USER CODE END Private defines */
 
 void MX_I2C1_Init(void);
 void MX_I2C2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-HAL_StatusTypeDef Write_Register(int nb_batt,static const uint8_t REG,static const uint8_t DATA);
-uint16_t read_register(I2C_HandleTypeDef hi2c, uint8_t REG_MSB);
-/* USER CODE END Prototypes */
+HAL_StatusTypeDef read_register(I2C_HandleTypeDef hi2c, uint8_t REG_MSB,uint16_t retVal);
+HAL_StatusTypeDef Write_Register(I2C_HandleTypeDef hi2c, uint8_t register_pointer, uint8_t register_value);
 
 #ifdef __cplusplus
 }

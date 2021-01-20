@@ -19,7 +19,7 @@ int BMSManagement_getLastStatus(void) //Comment on va faire ???
 	float cmp;
 	//vérifier l'état des switchs
 
-	cmp=BMSMangaement_getInfo('S',BATTERY1);
+	cmp=BMSManagement_getInfo('S',BATTERY1);
 	if (cmp>max) //define val1 (50% de la batterie), val2 (98% de la batterie)
 		val=1;
 	else if (cmp<min)
@@ -34,7 +34,7 @@ int BMSManagement_getLastStatus(void) //Comment on va faire ???
 }
 
 
-float BMSManagement_getInfo(char info, int num_batt) //done
+float BMSManagement_getInfo(char info, I2C_HandleTypeDef nb_batt) //done
 {
 	float val;
 	switch (info)
@@ -46,7 +46,7 @@ float BMSManagement_getInfo(char info, int num_batt) //done
 			val=InfoBatt_getCurrent(nb_batt);
 			break;
 		case 'S':
-			val=InfoBatt_getSOC(nb_batt);
+			val=InfoBatt_getSoc(nb_batt);
 			break;
 	}
 	return val;
@@ -55,30 +55,34 @@ float BMSManagement_getInfo(char info, int num_batt) //done
 
 void BMSManagement_Init(void)
 {
-	while (HAL_I2C_IsDeviceReady(&hi2c1,GAUGE_ADDR,1,100)!=HAL_OK)
+	HAL_StatusTypeDef ret;
+	while (HAL_I2C_IsDeviceReady(&BATTERY1,GAUGE_ADDR,1,100)!=HAL_OK)
 	{
-	  strcpy((char*)msg,"I2C Device not ready.\r\n");
-	  HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY);
-	  HAL_Delay(500);
+	  //strcpy((char*)msg,"I2C Device not ready.\r\n");
+	  //HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY); //Attention aux includes de l'UART et strcpy
+	  HAL_Delay(5);
 	}
-	ret=Write_Register8(CTRL_REG,AUTO_MODE); //I2C Master Transmit
+	ret=Write_Register(BATTERY1, CTRL_REG,AUTO_MODE); //I2C Master Transmit
 	if (ret!=HAL_OK)
 	{
-		strcpy((char*)msg,"Control Register Automatic Mode Error.\r\n");
-		HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY);
+		//strcpy((char*)msg,"Control Register Automatic Mode Error.\r\n");
+		//HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY);
+		HAL_Delay(5);
 	}
-	else
-	{
-		ret=Read_Register(CTRL_REG,bufRx,2);
+
+
+	while (HAL_I2C_IsDeviceReady(&BATTERY2,GAUGE_ADDR,1,100)!=HAL_OK)
+		{
+		  //strcpy((char*)msg,"I2C Device not ready.\r\n");
+		  //HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY); //Attention aux includes de l'UART et strcpy
+		  HAL_Delay(5);
+		}
+		ret=Write_Register(BATTERY2, CTRL_REG,AUTO_MODE); //I2C Master Transmit
 		if (ret!=HAL_OK)
 		{
-			strcpy((char*)msg,"Automatic Mode Set Control Error.\r\n");
-			HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY);
+			//strcpy((char*)msg,"Control Register Automatic Mode Error.\r\n");
+			//HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY);
+			HAL_Delay(5);
 		}
-		else
-		{
-	  		strcpy((char*)msg,"Automatic Mode Set Success.\r\n");
-	  		HAL_UART_Transmit(&huart2,msg,strlen((char*)msg),HAL_MAX_DELAY);
-	  	}
-	 }
+
 }

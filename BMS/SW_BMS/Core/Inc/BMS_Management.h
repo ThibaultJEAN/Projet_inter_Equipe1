@@ -8,6 +8,10 @@
 #ifndef SRC_BMS_MANAGEMENT_H_
 #define SRC_BMS_MANAGEMENT_H_
 
+#include "i2c.h"
+#include "InfoBatt.h"
+#include "ModeBatt.h"
+
 /*
  * @brief: Function who will manage batteries configuration
  * according to if we are in the load phase or not.
@@ -36,7 +40,7 @@ int BMSManagement_getLastStatus(void); //Niveau SOC
  * @retval: The value of the current (I), voltage (V), state of
  * charge (S)
  * */
-float BMSManagement_getInfo(char info, uint8_t num_batt);
+float BMSManagement_getInfo(char info, I2C_HandleTypeDef nb_batt);
 
 
 void BMSManagement_Init(void);

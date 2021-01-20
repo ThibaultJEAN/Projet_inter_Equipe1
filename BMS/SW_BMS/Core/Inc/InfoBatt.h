@@ -5,8 +5,13 @@
  *      Author: jerem
  */
 #include "BMS_Management.h" //a retirer si c'est l'inverse
+#include "i2c.h"
 #ifndef SRC_INFOBATT_H_
 #define SRC_INFOBATT_H_
+
+
+#define BATTERY1 hi2c1
+#define BATTERY2 hi2c2
 
 /*
  *	BATTERY 1 & 2
@@ -18,7 +23,7 @@
  * @param: Battery ID
  * @retval: The value of the current in the battery 1
  * */
-float InfoBatt_getCurrent(uint8_t nb_batt);
+float InfoBatt_getCurrent(I2C_HandleTypeDef nb_batt);
 
 
 /*
@@ -27,7 +32,7 @@ float InfoBatt_getCurrent(uint8_t nb_batt);
  * @param: Battery ID
  * @retval: The value of the voltage in the battery 1
  * */
-float InfoBatt_getVoltage(uint8_t nb_batt);
+float InfoBatt_getVoltage(I2C_HandleTypeDef nb_batt);
 
 
 /*
@@ -36,7 +41,7 @@ float InfoBatt_getVoltage(uint8_t nb_batt);
  * @param: Battery ID
  * @retval: The value of the Soc in the battery 1
  * */
-float InfoBatt_getSoc(uint8_t nb_batt);
+float InfoBatt_getSoc(I2C_HandleTypeDef nb_batt);
 
 
 /*
@@ -45,7 +50,7 @@ float InfoBatt_getSoc(uint8_t nb_batt);
  * @param: Initial value of SOC, Battery ID
  * @retval: HAL_StatusTypeDef Success (HAL_OK) or not (HAL_ERROR or HAL_BUSY)
  * */
-HAL_StatusTypeDef setSOC(uint8_t nb_batt, float initValue);
+HAL_StatusTypeDef setSoc(I2C_HandleTypeDef nb_batt, uint16_t initValue);
 
 
 //Fonctions supports
@@ -58,7 +63,7 @@ HAL_StatusTypeDef setSOC(uint8_t nb_batt, float initValue);
  * @param: Battery ID
  * @retval: uint16_t hexadecimal value of the SOC
  */
-uint16_t saveSOC(uint8_t nb_batt);
+uint16_t saveSOC(I2C_HandleTypeDef nb_batt);
 
 /*
  * @brief: The user can add this function to check
@@ -67,6 +72,6 @@ uint16_t saveSOC(uint8_t nb_batt);
  *@param: Battery ID
  *@retval: HAL_StatusTypeDef HAL_OK if connected.
  */
-HAL_StatusTypeDef checkLink(uint8_t nb_batt);
+HAL_StatusTypeDef checkLink(I2C_HandleTypeDef nb_batt);
 
 #endif /* SRC_INFOBATT_H_ */

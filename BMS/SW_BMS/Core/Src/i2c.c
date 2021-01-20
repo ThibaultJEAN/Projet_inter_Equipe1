@@ -28,16 +28,7 @@
 #include "i2c.h"
 
 /* USER CODE BEGIN 0 */
-static const uint8_t GAUGE_ADDR=0x64<<1;
-static const uint8_t CTRL_REG=0x01; //register B
-static const uint8_t AUTO_MODE=0xE8; //data + prescaler à 1024
-static const uint8_t SHUTDOWN=0xE9; //shutdown au registre B sans écraser
-static const uint8_t VOLT_REG=0x08;
-static const uint8_t AMP_REG=0x0E;
-static const uint8_t COUL_REG=0x02;
 
-#define BATTERY1 hi2c1
-#define BATTERY2 hi2c2
 /* USER CODE END 0 */
 
 I2C_HandleTypeDef hi2c1;
@@ -210,18 +201,17 @@ HAL_StatusTypeDef read_register(I2C_HandleTypeDef hi2c, uint8_t REG_MSB,uint16_t
 {
 	HAL_StatusTypeDef ret;
 	uint16_t valueMSB,valueLSB;
-	ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB,I2C_MEMADD_SIZE_8BIT,&retMSB,1,HAL_MAX_DELAY); //Since the connection between the µC and the gauge is check, we assume the read will return everytime a 'HAL_OK', thus, no need to test it.
+	ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB,I2C_MEMADD_SIZE_8BIT,&valueMSB,1,HAL_MAX_DELAY); //Since the connection between the µC and the gauge is check, we assume the read will return everytime a 'HAL_OK', thus, no need to test it.
 	valueMSB=valueMSB<<8;
 	if (ret==HAL_OK)
 	{
-		ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB+1,I2C_MEMADD_SIZE_8BIT,&retLSB,1,HAL_MAX_DELAY);
-		&retVal=retMSB+retLSB; //Check if it is correct.
+		ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB+1,I2C_MEMADD_SIZE_8BIT,&valueLSB,1,HAL_MAX_DELAY); //Ok pour les warning
+		retVal=valueMSB+valueLSB; //Check if it is correct.
 	}
 	return ret;
 }
 
-HAL_StatusTypeDef Write_Register(uint8_t hi2c,static const uint8_t REG,static const uint8_t DATA)
-{
+HAL_StatusTypeDef Write_Register(I2C_HandleTypeDef hi2c,uint8_t REG, uint8_t DATA){
 	uint8_t data[2];
 	data[0]=REG;
 	data[1]=DATA;
