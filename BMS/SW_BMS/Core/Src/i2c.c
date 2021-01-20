@@ -197,21 +197,23 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
 }
 
 /* USER CODE BEGIN 1 */
-HAL_StatusTypeDef read_register(I2C_HandleTypeDef hi2c, uint8_t REG_MSB,uint16_t retVal) //Pour le moment, sans code erreur - modifier le code pour qu'il ait un return HAL_StatusTypeDef et en paramètre un buffer 16bits pour la valeur.
+HAL_StatusTypeDef read_register(I2C_HandleTypeDef hi2c, uint8_t REG_MSB,uint16_t retVal)
 {
 	HAL_StatusTypeDef ret;
 	uint16_t valueMSB,valueLSB;
-	ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB,I2C_MEMADD_SIZE_8BIT,&valueMSB,1,HAL_MAX_DELAY); //Since the connection between the µC and the gauge is check, we assume the read will return everytime a 'HAL_OK', thus, no need to test it.
+	ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB,I2C_MEMADD_SIZE_8BIT,&valueMSB,1,HAL_MAX_DELAY);
 	valueMSB=valueMSB<<8;
 	if (ret==HAL_OK)
 	{
-		ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB+1,I2C_MEMADD_SIZE_8BIT,&valueLSB,1,HAL_MAX_DELAY); //Ok pour les warning
-		retVal=valueMSB+valueLSB; //Check if it is correct.
+		ret=HAL_I2C_Mem_Read(&hi2c,(uint16_t)GAUGE_ADDR,(uint16_t)REG_MSB+1,I2C_MEMADD_SIZE_8BIT,&valueLSB,1,HAL_MAX_DELAY);
+		retVal=valueMSB+valueLSB; 			//We return the value through retVal while the function itself returns a HAL_... for the user to check any errors
 	}
 	return ret;
-}
+}										//Through the code's development, HAL_I2C_Mem_Read seemed to be the best - instead of HAL_I2C_Receive
 
-HAL_StatusTypeDef Write_Register(I2C_HandleTypeDef hi2c,uint8_t REG, uint8_t DATA){
+
+HAL_StatusTypeDef Write_Register(I2C_HandleTypeDef hi2c,uint8_t REG, uint8_t DATA)
+{
 	uint8_t data[2];
 	data[0]=REG;
 	data[1]=DATA;
