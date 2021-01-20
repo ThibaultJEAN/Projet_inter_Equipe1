@@ -20,15 +20,15 @@ int BMSManagement_getLastStatus(void) //Comment on va faire ???
 	//vérifier l'état des switchs
 
 	cmp=BMSManagement_getInfo('S',BATTERY1);
-	if (cmp>max) //define val1 (50% de la batterie), val2 (98% de la batterie)
+	if (cmp>17.001) //define val1 (50% de la batterie), val2 (98% de la batterie)
 		val=1;
-	else if (cmp<min)
+	else if (cmp<10.0)
 		val=0;
 
-	cmp=BMSMangaement_getInfo('S',BATTERY2);
-	if (cmp>max)
+	cmp=BMSManagement_getInfo('S',BATTERY2);
+	if (cmp>17.001)
 		val=1;
-	else if (cmp<min)
+	else if (cmp<10.0)
 		val=0;
 	return val;
 }

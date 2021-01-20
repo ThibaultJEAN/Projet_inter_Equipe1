@@ -1,3 +1,6 @@
-InfoBatt.c:15:7:InfoBatt_getCurrent	24	static
-InfoBatt.c:23:7:InfoBatt_getVoltage	24	static
-InfoBatt.c:31:7:InfoBatt_getSoc	24	static
+InfoBatt.c:24:7:InfoBatt_getCurrent	96	static
+InfoBatt.c:37:7:InfoBatt_getVoltage	96	static
+InfoBatt.c:50:7:InfoBatt_getSoc	96	static
+InfoBatt.c:64:19:setSoc	96	static
+InfoBatt.c:89:10:saveSOC	96	static
+InfoBatt.c:100:19:checkLink	8	static

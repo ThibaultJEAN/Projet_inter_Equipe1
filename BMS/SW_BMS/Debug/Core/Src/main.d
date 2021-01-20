@@ -28,8 +28,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/tim.h \
- ../Core/Inc/gpio.h ../Core/Src/BMS_Management.h ../Core/Src/InfoBatt.h \
- ../Core/Src/ModeBatt.h
+ ../Core/Inc/gpio.h ../Core/Inc/BMS_Management.h ../Core/Inc/i2c.h \
+ ../Core/Inc/InfoBatt.h ../Core/Inc/BMS_Management.h \
+ ../Core/Inc/ModeBatt.h ../Core/Inc/gpio.h ../Core/Inc/InfoBatt.h \
+ ../Core/Inc/ModeBatt.h
 
 ../Core/Inc/main.h:
 
@@ -97,8 +99,18 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/gpio.h:
 
-../Core/Src/BMS_Management.h:
+../Core/Inc/BMS_Management.h:
 
-../Core/Src/InfoBatt.h:
+../Core/Inc/i2c.h:
 
-../Core/Src/ModeBatt.h:
+../Core/Inc/InfoBatt.h:
+
+../Core/Inc/BMS_Management.h:
+
+../Core/Inc/ModeBatt.h:
+
+../Core/Inc/gpio.h:
+
+../Core/Inc/InfoBatt.h:
+
+../Core/Inc/ModeBatt.h:

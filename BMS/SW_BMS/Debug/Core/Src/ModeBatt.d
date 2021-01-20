@@ -1,5 +1,5 @@
-Core/Src/ModeBatt.o: ../Core/Src/ModeBatt.c ../Core/Src/ModeBatt.h \
- ../Core/Src/BMS_Management.h ../Core/Inc/gpio.h ../Core/Inc/main.h \
+Core/Src/ModeBatt.o: ../Core/Src/ModeBatt.c ../Core/Inc/ModeBatt.h \
+ ../Core/Inc/BMS_Management.h ../Core/Inc/i2c.h ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../Core/Inc/stm32l4xx_hal_conf.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \
@@ -27,13 +27,14 @@ Core/Src/ModeBatt.o: ../Core/Src/ModeBatt.c ../Core/Src/ModeBatt.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h \
- ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h
+ ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
+ ../Core/Inc/InfoBatt.h ../Core/Inc/ModeBatt.h ../Core/Inc/gpio.h
 
-../Core/Src/ModeBatt.h:
+../Core/Inc/ModeBatt.h:
 
-../Core/Src/BMS_Management.h:
+../Core/Inc/BMS_Management.h:
 
-../Core/Inc/gpio.h:
+../Core/Inc/i2c.h:
 
 ../Core/Inc/main.h:
 
@@ -92,3 +93,9 @@ Core/Src/ModeBatt.o: ../Core/Src/ModeBatt.c ../Core/Src/ModeBatt.h \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h:
 
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h:
+
+../Core/Inc/InfoBatt.h:
+
+../Core/Inc/ModeBatt.h:
+
+../Core/Inc/gpio.h:
