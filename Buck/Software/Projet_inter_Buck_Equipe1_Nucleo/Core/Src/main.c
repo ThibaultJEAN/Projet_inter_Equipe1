@@ -32,12 +32,25 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define F_PWM    75000UL // min : 1220 Hz max: 80 MHz
+#define F_PWM    150000UL // min : 1220 Hz max: 80 MHz
 #define F_ACQ    7500UL // min : 0.018 Hz max: 80 MHz
 #define KVOUTMON (6.2/(110.0+6.2))
+<<<<<<< HEAD
 #define KVINMON  (6.8/(100.0+6.8))
 #define KIMON    (0.006*50.0)
+=======
+#define KVINMON  (6.2/(100.0+6.2))
+#define KIMON    (0.006*51.0)
+>>>>>>> 2348094a81acae2ed6a24b43f9213fbe63be2bc5
 #define VCC      (3.3)
+
+#define VOUT_MAX 48.0
+#define VOUT_MIN 0.00
+#define IOUT_MAX 10.0
+#define IOUT_MIN 0.00
+#define DUTY_MAX 80.0
+#define DUTY_MIN 20.0
+
 
 #define REG_MODE_CV   0
 #define REG_MODE_CC   1
@@ -48,12 +61,19 @@
 
 /* Bloc Define Regulation  */
 
+<<<<<<< HEAD
 #define T_ACQ 1/7500 // Temps d'acquisition
 
 #define KP_CC 1 // Valeur du coefficient proportionnel régulation CC
 #define KI_CC 1 // Valeur du coefficient intégral régulation CC
 #define KP_CV 250/2370 // Valeur du coefficient proportionnel régulation CV Valeur Matlab : 32,78
 #define KI_CV 1 // Valeur du coefficient intégral régulation CV Valeur Matlab : 98,44
+=======
+#define KP_CC 1 			// Valeur du coefficient proportionnel régulation CC
+#define KI_CC 1 			// Valeur du coefficient intégral régulation CC
+#define KP_CV 250/2370 		// Valeur du coefficient proportionnel régulation CV
+#define KI_CV 1 			// Valeur du coefficient intégral régulation CV
+>>>>>>> 2348094a81acae2ed6a24b43f9213fbe63be2bc5
 
 #define SAT_ERR_TOT 400 // Valeur pour la saturation de l'erreur totale
 
@@ -74,6 +94,7 @@ TIM_HandleTypeDef htim2;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+<<<<<<< HEAD
 int Duty_Cycle = 0;
 int counter = 0;
 int Value = 0;
@@ -87,14 +108,32 @@ int MPPT_incrément = 0;
 int Reg_Mode = 0;
 int Vout_Ordered = 0;
 int I_Ordered = 0;
+=======
+uint16_t Duty_Cycle = 0;	//Timer duty value, from 0 to F_TIM1
+uint16_t Vout_mon = 0;		//Measured output voltage, from 0 to 4095
+uint16_t Vin_mon = 0;		//Measured input  voltage, from 0 to 4095
+uint16_t I_mon = 0;			//Measured output current, from 0 to 4095
+>>>>>>> 2348094a81acae2ed6a24b43f9213fbe63be2bc5
 
-uint32_t ADC_buffer[3] = {0};
+uint16_t Pin = 0;   //Measured input power for MPPT regulation
+uint16_t Pin_p = 0; //Previously measured input power for MPPT regulation
+uint16_t I_inc = 0;	//
 
-/* Bloc Variables Regulation  */
+uint8_t Reg_Mode = REG_MODE_OL;
+uint16_t Vout_set = 0;
+uint16_t Iout_set = 0;
 
+<<<<<<< HEAD
 int Delta_Err = 0;  //Valeur de l'erreur entre la tension/courant souhaitée et la valeur lue
 int Err_Pre = 0;  //Valeur de l'erreur précédente
 int Duty_Pre = 0; //Valeur de duty cycle précédente
+=======
+uint32_t ADC_buffer[3] = {0};
+
+int Delta_Err = 0;  	//Valeur de l'erreur entre la tension/courant souhaitée et la valeur lue
+int Err_Tot = 0; 		//Pour la partie intégrale de la régulation
+int Delta_Duty = 0; 	//Variation du duty après la correction proportionnelle, intégrale
+>>>>>>> 2348094a81acae2ed6a24b43f9213fbe63be2bc5
 
 
 /* USER CODE END PV */
@@ -112,7 +151,7 @@ static void MX_TIM2_Init(void);
 void Set_Duty_Cycle();
 void SetVout(float target);
 void SetI(float target);
-void Set_Duty(float target);
+void Set_Duty_OL(float target);
 
 void RegulateCV(void);
 void RegulateCC(void);
@@ -542,34 +581,27 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void Set_Duty_Cycle()
-{
+void Set_Duty_Cycle(){
 
+<<<<<<< HEAD
 	if (Duty_Cycle>((F_TIM1-1)*0.9))
 	{
 		Duty_Cycle= (F_TIM1 -1)*0.9;
 	} else if (Duty_Cycle<(F_TIM1*0.1))
 	{
 		Duty_Cycle=0.1*F_TIM1;
+=======
+	if (Duty_Cycle>F_TIM1*DUTY_MAX){
+		Duty_Cycle= F_TIM1*DUTY_MAX;
+	} else if (Duty_Cycle<F_TIM1*DUTY_MIN)	{
+		Duty_Cycle=F_TIM1*DUTY_MIN;
+>>>>>>> 2348094a81acae2ed6a24b43f9213fbe63be2bc5
 	}
 	__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Duty_Cycle);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-
-
-	//HAL_ADC_ConfigChannel(&hadc1, );
-	//HAL_ADC_Start(&hadc1);
-	//HAL_ADC_PollForConversion(&hadc1, 1000);
-	/*if (htim == &htim2)
-	{
-		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	//Vout_mon = HAL_ADC_GetValue(&hadc1);
-	//Vout_mon = ADC_buffer[0];
-	//Vin_mon = ADC_buffer[1];
-	//I_mon = ADC_buffer[2];
-	}*/
 
 }
 
@@ -595,21 +627,25 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 
 }
 
-void SetVout(float target)
-{
-	Vout_Ordered = (target)*(KVOUTMON*4096.0)/VCC;
+void SetVout(float target){
+	if(target>VOUT_MAX)target=VOUT_MAX;
+	if(target<VOUT_MIN)target=VOUT_MIN;
+	Vout_set = (target)*(KVOUTMON*4096.0)/VCC;
 }
 
-void SetI(float target)
-{
-	I_Ordered = (target)*(KIMON*4096.0)/VCC;
+void SetI(float target){
+	if(target>IOUT_MAX)target=IOUT_MAX;
+	if(target<IOUT_MIN)target=IOUT_MIN;
+	Iout_set = (target)*(KIMON*4096.0)/VCC;
 }
 
-void Set_Duty(float target)
-{
+void Set_Duty_OL(float target){
+	if(target>DUTY_MAX)target=DUTY_MAX;
+	if(target<DUTY_MIN)target=DUTY_MIN;
 	Duty_Cycle=(target)*F_TIM1;
 }
 
+<<<<<<< HEAD
 void RegulateCV(void)
 {
 
@@ -623,17 +659,19 @@ void RegulateCV(void)
 	Err_pre = Delta_Err;
 	/*Delta_Err = Vout_Ordered - Vout_mon;
 	Err_Tot += Delta_Err;
+=======
+void RegulateCV(void){
+	Delta_Err = Vout_set - Vout_mon;
+	/*Err_Tot += Delta_Err;
+>>>>>>> 2348094a81acae2ed6a24b43f9213fbe63be2bc5
 
-	if (Err_Tot > SAT_ERR_TOT)
-	{
+	if (Err_Tot > SAT_ERR_TOT){
 		Err_Tot = SAT_ERR_TOT;
-	}
-	if (Err_Tot < -(SAT_ERR_TOT))
-	{
+	}else if (Err_Tot < -(SAT_ERR_TOT)){
 		Err_Tot = -SAT_ERR_TOT;
-	}
+	}*/
 
-	Delta_Duty = (Delta_Err *KP_CV) + (Err_Tot *KP_CV/10 );
+	Delta_Duty = (Delta_Err *KP_CV) ;//+ (Err_Tot *KP_CV/10 );
 	Duty_Cycle += Delta_Duty;
 
 	Set_Duty_Cycle();*/
@@ -648,9 +686,8 @@ void RegulateCV(void)
 	Set_Duty_Cycle();*/
 }
 
-void RegulateCC(void)
-{
-	Delta_Err = I_Ordered - I_mon;
+void RegulateCC(void){
+	Delta_Err = Iout_set - I_mon;
 	Err_Tot += Delta_Err;
 
 	if (Err_Tot > SAT_ERR_TOT)
