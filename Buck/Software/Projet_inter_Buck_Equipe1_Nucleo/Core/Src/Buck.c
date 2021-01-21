@@ -67,14 +67,15 @@ void RegulateCC(void){
 }
 
 void RegulateMPPT(void){
-	if(cnt++>25){
-		Pin = I_mon*Vin_mon;
-		if (Pin < (Pin_p - 551)){
-			I_inc=-1;
-		}else if(Pin > (Pin_p + 551)){
-			I_inc=1;
+	if(cnt++>25){					//5kHz/25=200Hz
+		Pin = I_mon*Vin_mon;		//calculate "input" power
+		if (Pin < (Pin_p - 55100)){	//55100~=2W hysteresis threshold
+			I_inc=-1;				//change current incremement direction of power is dropping
+			Pin_p = Pin;
+		}else if(Pin > (Pin_p + 55100)){
+			I_inc=1;				//change current incremement direction of power is dropping
+			Pin_p = Pin;
 		}
-		Pin_p = Pin;
 		Iout_set+=I_inc;
 		cnt=0;
 	}

@@ -7,8 +7,8 @@
 #define F_PWM    150000UL // min : 1220 Hz max: 80 MHz
 #define F_ACQ    5000UL // min : 0.018 Hz max: 80 MHz
 #define KVOUTMON (6.2/(110.0+6.2))
-#define KVINMON  (0.942*0.05838)//(6.2/(100.0+6.2))
-#define KIMON    (0.006*51.0)
+#define KVINMON  (0.942*0.05838)	//(6.2/(100.0+6.2))	//corrected to compensate resistor tolerances
+#define KIMON    (0.006*51.0)		//Rshunt*Gain(current sense amp)
 #define VCC      (3.3)
 
 #define VOUT_MAX 48.0
